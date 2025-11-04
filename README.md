@@ -1,1 +1,1 @@
-Le calcul le plus magique.
+Le calcule le plus magique.
