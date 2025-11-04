@@ -3,7 +3,7 @@
 #include <ctype.h>
 
 //Fp1.2 : Verifier la saisie utilisateur
-int verifier(char* nombre_utilisateur){
+int verifier_la_valeur(char* nombre_utilisateur){
     for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
         if (!isdigit(nombre_utilisateur[i]) && nombre_utilisateur[i] != '+' 
             && nombre_utilisateur[i] != '-' && nombre_utilisateur[i] != '/' 
@@ -13,10 +13,24 @@ int verifier(char* nombre_utilisateur){
             printf("Erreur : entree invalide '%c'\n", nombre_utilisateur[i]);
             return -1;
         }
-       /* if(i < 1 && !isdigit(nombre_utilisateur[i])){
-            printf("Erreur : l'expression doit commencer par 2 chiffres\n");
+
+        char suivant = nombre_utilisateur[i+1];
+if (isdigit(nombre_utilisateur[i]) && !isdigit(suivant) && suivant != ' ' && suivant != '\n' && suivant != '\0'){
+    printf("Erreur : ne pas coller chiffre et operateur\n");
+    return -1;
+}
+if ((nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') && isdigit(suivant)){
+    printf("Erreur : ne pas coller operateur et chiffre\n");
+    return -1;
+}
+
+        if(i == 1 && !isdigit(nombre_utilisateur[0]) && !isdigit(nombre_utilisateur[1])){
+            // Si les deux premiers caracteres ne sont pas des chiffres
+            printf("Erreur : deux chiffres sont necessaire au debut\n");
             return -1;
-        }*/
+
+        }
+      
     }
     return 0;
 }
@@ -36,7 +50,7 @@ char* obtenir(){
     fgets(nombre_utilisateur, taille, stdin);
     
     // Verification de la saisie utilisateur
-    if (verifier(nombre_utilisateur) == -1) {
+    if (verifier_la_valeur(nombre_utilisateur) == -1) {
         free(nombre_utilisateur);
         return NULL;
     }
@@ -88,7 +102,7 @@ int main(){
     int res;
 
     if (nombre_utilisateur != NULL) {
-        printf("Vous avez entre : %s\n", nombre_utilisateur);
+        printf("Vous avez entrez : %s\n", nombre_utilisateur);
         
         int res = calcule(nombre_utilisateur);
         
