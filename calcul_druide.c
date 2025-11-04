@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-//Fp1? : Verifier la saisie utilisateur
+//Fp1.2 : Verifier la saisie utilisateur
 int verifier(char* nombre_utilisateur){
     for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
         if (!isdigit(nombre_utilisateur[i]) && nombre_utilisateur[i] != '+' 
@@ -13,6 +13,10 @@ int verifier(char* nombre_utilisateur){
             printf("Erreur : entree invalide '%c'\n", nombre_utilisateur[i]);
             return -1;
         }
+       /* if(i < 1 && !isdigit(nombre_utilisateur[i])){
+            printf("Erreur : l'expression doit commencer par 2 chiffres\n");
+            return -1;
+        }*/
     }
     return 0;
 }
@@ -42,21 +46,33 @@ char* obtenir(){
 
 //Fp2.2 : Trier les elements
 int trier_les_elements(char* nombre_utilisateur){
+    int nombres[50];  // Tableau pour stocker les nombres
+    int nb_count = 0;  // Compteur de nombres
+    
     for(int i = 0; nombre_utilisateur[i] != '\0'; i++){
-        ///Si chiffre
         if (isdigit(nombre_utilisateur[i])) {
-            printf("Chiffre trouve: %c\n", nombre_utilisateur[i]);
-        } 
-        // Si opérateur
+            //fusion des chiffres en nombres entiers
+            int nombre = 0;
+            
+            // Tant qu'on a des chiffres, on continue
+            while (isdigit(nombre_utilisateur[i])) {
+                nombre = nombre * 10 + (nombre_utilisateur[i] - '0');
+                i++;
+            }
+            i--;  // On recule car la boucle for va faire i++
+
+            nombres[nb_count] = nombre;
+            nb_count++;
+            
+            printf("Nombre trouve: %d\n", nombre);
+        }
         else if (nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || 
                  nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') {
+            // On peut traiter les operateurs ici si besoin
             printf("Operateur trouve: %c\n", nombre_utilisateur[i]);
         }
-        //Si espace ou \n
-        else {
-            continue;
-        }
     }
+    
     return 0;
 }
 
