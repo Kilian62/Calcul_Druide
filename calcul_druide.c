@@ -1,6 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdbool.h>
+
+//Fp1.2.3 : Verifier le nombre d'operateurs
+bool verifier_le_nombre_operateurs(char* nombre_utilisateur){
+    int compteur_operateurs = 0;
+    int compteur_chiffres = 0;
+    for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
+        if (isdigit(nombre_utilisateur[i])) {
+            compteur_chiffres++;
+        }
+        else if (nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || 
+                 nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') {
+            compteur_operateurs++;
+        }
+        else {
+            continue;
+        }
+    }
+    if (compteur_operateurs != compteur_chiffres -1) {
+        printf("Erreur : il doit y avoir plus de chiffres que d'operateurs\n");
+        return false;
+    }
+    else {
+        return true;
+    }
+}
 
 //Fp1.2 : Verifier la saisie utilisateur
 int verifier_la_valeur(char* nombre_utilisateur){
@@ -15,22 +41,25 @@ int verifier_la_valeur(char* nombre_utilisateur){
         }
 
         char suivant = nombre_utilisateur[i+1];
-if (isdigit(nombre_utilisateur[i]) && !isdigit(suivant) && suivant != ' ' && suivant != '\n' && suivant != '\0'){
-    printf("Erreur : ne pas coller chiffre et operateur\n");
-    return -1;
-}
-if ((nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') && isdigit(suivant)){
-    printf("Erreur : ne pas coller operateur et chiffre\n");
-    return -1;
-}
+    if (isdigit(nombre_utilisateur[i]) && !isdigit(suivant) && suivant != ' ' && suivant != '\n' && suivant != '\0'){
+        printf("Erreur : ne pas coller chiffre et operateur\n");
+        return -1;
+    }
+    if ((nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') && isdigit(suivant)){
+        printf("Erreur : ne pas coller operateur et chiffre\n");
+        return -1;
+    }
 
-        if(i == 1 && !isdigit(nombre_utilisateur[0]) && !isdigit(nombre_utilisateur[1])){
-            // Si les deux premiers caracteres ne sont pas des chiffres
-            printf("Erreur : deux chiffres sont necessaire au debut\n");
-            return -1;
+            if(i == 1 && !isdigit(nombre_utilisateur[0]) && !isdigit(nombre_utilisateur[1])){
+                // Si les deux premiers caracteres ne sont pas des chiffres
+                printf("Erreur : deux chiffres sont necessaire au debut\n");
+                return -1;
 
+            }
+        
         }
-      
+    if (!verifier_le_nombre_operateurs(nombre_utilisateur)){
+        return -1;
     }
     return 0;
 }
