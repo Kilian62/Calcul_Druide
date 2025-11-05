@@ -149,7 +149,7 @@ int trier_les_elements(char* nombre_utilisateur){
         }
     }
     
-    return nombre_utilisateur[0];
+    return nombres[0];
 }
 
 //Fp2 : Calculer le resultat
