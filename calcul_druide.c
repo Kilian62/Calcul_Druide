@@ -16,7 +16,6 @@ char* uniforme(char* nombre_utilisateur) {
         }
     }
     result[j] = '\0';
-    printf("Saisie uniforme : %s\n", result);
     return result;
 
 }
@@ -121,7 +120,7 @@ char* obtenir(){
     }  
     // Demande de saisie utilisateur et obtention
     printf("Bienvenu druide master !!\n");
-    printf("Entrer des chiffres suivis d'operateurs : \n");
+    printf("Entrer des chiffres suivis d'operateurs : ");
     fgets(nombre_utilisateur, taille, stdin);
     
     // Verification de la saisie utilisateur
@@ -154,7 +153,6 @@ int trier_les_elements(char* nombre_utilisateur){
             nombres[nb_count] = nombre;
             nb_count++;
             
-            printf("Nombre trouve: %.2f\n", nombre);
         }
         else if (nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || 
                  nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') {
@@ -171,9 +169,6 @@ int trier_les_elements(char* nombre_utilisateur){
                 
                 resultat = operation(nombres[nb_count - 2], nombres[nb_count - 1]);
                 nombres[nb_count - 2] = resultat;
-                
-                printf("Operateur trouve: %c\n", nombre_utilisateur[i]);
-                printf("Resultat partiel: %.2f\n", nombres[nb_count - 2]);
                 nb_count--;
             }
         }
@@ -186,8 +181,7 @@ int trier_les_elements(char* nombre_utilisateur){
 int calcule(char* nombre_utilisateur){
     // Fonction de calcul à implémenter
     float res = trier_les_elements(nombre_utilisateur);
-    printf("Le resultat final est : %.2f\n", res);
-    return 0;
+    return res;
 }
 
 int main(){
@@ -195,9 +189,9 @@ int main(){
     int res;
 
     if (nombre_utilisateur != NULL) {
-        printf("Vous avez entrez : %s\n", nombre_utilisateur);
         
         float res = calcule(nombre_utilisateur);
+        printf("Le resultat est : %.2f\n", res);
         
         free(nombre_utilisateur);
     }
