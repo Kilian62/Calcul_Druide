@@ -89,13 +89,6 @@ Le programme détecte et affiche des messages pour :
 - `mul()` : Multiplication
 - `div_op()` : Division
 
-## 🐛 Corrections à apporter
-
-Pour supprimer les warnings de compilation :
-
-1. Ajouter `#include <string.h>` en haut du fichier
-2. Changer le type de retour de `trier_les_elements()` et `calcule()` de `int` à `float`
-
 ## 📝 Exemple d'exécution
 
 ```
