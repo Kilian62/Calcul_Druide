@@ -24,72 +24,105 @@ float (*get_operation(char op))(float, float) {
 //Fp1.2.3 : Verifier le nombre d'operateurs
 bool verifier_le_nombre_operateurs(char* nombre_utilisateur){
     int compteur_operateurs = 0;
-    int compteur_chiffres = 0;
-
-    for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
-        if(isspace(nombre_utilisateur[i])){
-            continue;
+    int compteur_nombres = 0;  // Nom plus clair
+    int i = 0;
+    
+    while (nombre_utilisateur[i] != '\0'){
+        
+        // Ignorer les espaces
+        if (isspace(nombre_utilisateur[i])){
+            i++;
         }
-        if (isdigit(nombre_utilisateur[i])) {
-                compteur_chiffres++;
-
-                while(isdigit(nombre_utilisateur[i + 1])) {
-                    i++;
-                }
+        
+        // Compter un nombre (peut avoir plusieurs chiffres)
+        if (isdigit(nombre_utilisateur[i])){
+            compteur_nombres++;
+            // Sauter tous les chiffres du même nombre
+            while (isdigit(nombre_utilisateur[i])){
+                i++;
+            }
         }
-
-        else if (nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || 
-                 nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') {
+        
+        // Compter un opérateur
+        if (nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || 
+            nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/'){
             compteur_operateurs++;
+            i++;
         }
-        else {
+        
+        // Caractère invalide (lettre, ponctuation, etc.)
+        if (isalpha(nombre_utilisateur[i]) || ispunct(nombre_utilisateur[i])){
             printf("Erreur : caractere invalide '%c'\n", nombre_utilisateur[i]);
+            return false;
         }
+        
+        i++;
     }
-    if (compteur_operateurs != compteur_chiffres -1) {
+    
+    // Vérifier la relation : nb_operateurs = nb_nombres - 1
+    if (compteur_operateurs != compteur_nombres - 1){
         printf("Erreur : il doit y avoir 1 operateur de moins que le nombre de chiffres\n");
         return false;
     }
-    return true;
     
+    return true;
 }
 
 //Fp1.2 : Verifier la saisie utilisateur
 int verifier_la_valeur(char* nombre_utilisateur){
-    int compteur = 0;
+    // Vérifier les caractères invalides
     for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
-       if (!isdigit(nombre_utilisateur[i]) && nombre_utilisateur[i] != '+' 
+        if (!isdigit(nombre_utilisateur[i]) && nombre_utilisateur[i] != '+' 
             && nombre_utilisateur[i] != '-' && nombre_utilisateur[i] != '/' 
             && nombre_utilisateur[i] != '*' && nombre_utilisateur[i] != '\n' 
             && nombre_utilisateur[i] != ' ' && nombre_utilisateur[i] != '.'){
             printf("Erreur : entree invalide '%c'\n", nombre_utilisateur[i]);
             return -1;
         }
+    }
     
+    // Vérifier qu'on ne colle pas chiffres et opérateurs
+    for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
         char suivant = nombre_utilisateur[i+1];
 
-        if (isdigit(nombre_utilisateur[i]) && !isdigit(suivant) && suivant != ' ' && suivant != '\n' && suivant != '\0' && suivant != '.'){
+        // Chiffre suivi directement d'un opérateur (sans espace)
+        if (isdigit(nombre_utilisateur[i]) && 
+            (suivant == '+' || suivant == '-' || suivant == '*' || suivant == '/')){
             printf("Erreur : ne pas coller chiffre et operateur\n");
             return -1;
         }
-        if ((nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') && isdigit(suivant)){
+        
+        // Opérateur suivi directement d'un chiffre (sans espace)
+        if ((nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || 
+             nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') && 
+            isdigit(suivant)){
             printf("Erreur : ne pas coller operateur et chiffre\n");
             return -1;
         }
-        // verfier qu'il y a au moins deux chiffres au debut
-        while (isdigit(nombre_utilisateur[i + compteur]) ) {
-                compteur++;
-        }
-        compteur++;
-        if(i == 0 && !isdigit(nombre_utilisateur[compteur]) ){
-            printf("Erreur : deux chiffres sont necessaire au debut\n");
-            return -1;
-        }
-        
     }
+    
+    // Vérifier qu'il y a au moins 2 nombres dans l'expression
+    int compteur_nombres = 0;
+    for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
+        if (isdigit(nombre_utilisateur[i])) {
+            compteur_nombres++;
+            // Sauter les autres chiffres du même nombre
+            while(isdigit(nombre_utilisateur[i + 1])) {
+                i++;
+            }
+        }
+    }
+    
+    if (compteur_nombres < 2){
+        printf("Erreur : deux nombres sont necessaires au minimum\n");
+        return -1;
+    }
+    
+    // Vérifier le nombre d'opérateurs
     if (!verifier_le_nombre_operateurs(nombre_utilisateur)){
         return -1;
     }
+    
     return 0;
 }
 
@@ -121,8 +154,8 @@ float trier_les_elements(char* nombre_utilisateur){
     float nombres[50];  // Tableau pour stocker les nombres
     int nb_count = 0;  // Compteur de nombres
     float resultat = 0;
-    
-    for(int i = 0; nombre_utilisateur[i] != '\0'; i++){
+    int i =0;
+    while(nombre_utilisateur[i] != '\0'){
         if (isdigit(nombre_utilisateur[i])) {
             //fusion des chiffres en nombres entiers
             float nombre = 0;
@@ -156,6 +189,7 @@ float trier_les_elements(char* nombre_utilisateur){
                 nb_count--;
             }
         }
+        i++;
     }
     
     return nombres[0];
