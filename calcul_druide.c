@@ -2,23 +2,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
-
-char* uniforme(char* nombre_utilisateur) {
-    char* result = malloc(strlen(nombre_utilisateur) + 1);
-    if (result == NULL) {
-        fprintf(stderr, "Erreur d'allocation mémoire\n");
-        return NULL;
-    }
-    int j = 0;
-    for (int i = 0; nombre_utilisateur[i] != '\0'; i++) {
-        if (nombre_utilisateur[i] != ' ') {
-            result[j++] = nombre_utilisateur[i];
-        }
-    }
-    result[j] = '\0';
-    return result;
-
-}
+#include <string.h>
 // Fonctions d'opérations
 float add(float a, float b) { return a + b; }
 float sub(float a, float b) { return a - b; }
@@ -133,7 +117,7 @@ char* obtenir(){
 }
 
 //Fp2.2 : Trier les elements
-int trier_les_elements(char* nombre_utilisateur){
+float trier_les_elements(char* nombre_utilisateur){
     float nombres[50];  // Tableau pour stocker les nombres
     int nb_count = 0;  // Compteur de nombres
     float resultat = 0;
@@ -178,7 +162,7 @@ int trier_les_elements(char* nombre_utilisateur){
 }
 
 //Fp2 : Calculer le resultat
-int calcule(char* nombre_utilisateur){
+float calcule(char* nombre_utilisateur){
     // Fonction de calcul à implémenter
     float res = trier_les_elements(nombre_utilisateur);
     return res;
@@ -186,7 +170,6 @@ int calcule(char* nombre_utilisateur){
 
 int main(){
     char* nombre_utilisateur = obtenir();
-    int res;
 
     if (nombre_utilisateur != NULL) {
         
