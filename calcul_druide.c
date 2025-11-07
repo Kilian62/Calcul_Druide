@@ -3,6 +3,23 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+char* uniforme(char* nombre_utilisateur) {
+    char* result = malloc(strlen(nombre_utilisateur) + 1);
+    if (result == NULL) {
+        fprintf(stderr, "Erreur d'allocation mémoire\n");
+        return NULL;
+    }
+    int j = 0;
+    for (int i = 0; nombre_utilisateur[i] != '\0'; i++) {
+        if (nombre_utilisateur[i] != ' ') {
+            result[j++] = nombre_utilisateur[i];
+        }
+    }
+    result[j] = '\0';
+    printf("Saisie uniforme : %s\n", result);
+    return result;
+
+}
 // Fonctions d'opérations
 float add(float a, float b) { return a + b; }
 float sub(float a, float b) { return a - b; }
@@ -25,29 +42,38 @@ float (*get_operation(char op))(float, float) {
 bool verifier_le_nombre_operateurs(char* nombre_utilisateur){
     int compteur_operateurs = 0;
     int compteur_chiffres = 0;
+
     for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
-        if (isdigit(nombre_utilisateur[i])) {
-            compteur_chiffres++;
+        if(isspace(nombre_utilisateur[i])){
+            continue;
         }
+        if (isdigit(nombre_utilisateur[i])) {
+                compteur_chiffres++;
+
+                while(isdigit(nombre_utilisateur[i + 1])) {
+                    i++;
+                }
+        }
+
         else if (nombre_utilisateur[i] == '+' || nombre_utilisateur[i] == '-' || 
                  nombre_utilisateur[i] == '*' || nombre_utilisateur[i] == '/') {
             compteur_operateurs++;
         }
         else {
-            continue;
+            printf("Erreur : caractere invalide '%c'\n", nombre_utilisateur[i]);
         }
     }
     if (compteur_operateurs != compteur_chiffres -1) {
         printf("Erreur : il doit y avoir 1 operateur de moins que le nombre de chiffres\n");
         return false;
     }
-    else {
-        return true;
-    }
+    return true;
+    
 }
 
 //Fp1.2 : Verifier la saisie utilisateur
 int verifier_la_valeur(char* nombre_utilisateur){
+    int compteur = 0;
     for (int i = 0; nombre_utilisateur[i] != '\0'; i++){
        if (!isdigit(nombre_utilisateur[i]) && nombre_utilisateur[i] != '+' 
             && nombre_utilisateur[i] != '-' && nombre_utilisateur[i] != '/' 
@@ -67,8 +93,12 @@ int verifier_la_valeur(char* nombre_utilisateur){
             printf("Erreur : ne pas coller operateur et chiffre\n");
             return -1;
         }
-
-        if(i == 1 && !isdigit(nombre_utilisateur[0]) && !isdigit(nombre_utilisateur[1])){
+        // verfier qu'il y a au moins deux chiffres au debut
+        while (isdigit(nombre_utilisateur[i + compteur]) ) {
+                compteur++;
+        }
+        compteur++;
+        if(i == 0 && !isdigit(nombre_utilisateur[compteur]) ){
             printf("Erreur : deux chiffres sont necessaire au debut\n");
             return -1;
         }
