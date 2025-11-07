@@ -24,7 +24,7 @@ float (*get_operation(char op))(float, float) {
 //Fp1.2.3 : Verifier le nombre d'operateurs
 bool verifier_le_nombre_operateurs(char* nombre_utilisateur){
     int compteur_operateurs = 0;
-    int compteur_nombres = 0;  // Nom plus clair
+    int compteur_nombres = 0;
     int i = 0;
     
     while (nombre_utilisateur[i] != '\0'){
@@ -181,7 +181,7 @@ float trier_les_elements(char* nombre_utilisateur){
                 // Vérification division par zéro
                 if (nombre_utilisateur[i] == '/' && nombres[nb_count - 1] == 0) {
                     printf("Erreur: Division par zero\n");
-                    return -1;
+                    exit(1);
                 }
                 
                 resultat = operation(nombres[nb_count - 2], nombres[nb_count - 1]);
